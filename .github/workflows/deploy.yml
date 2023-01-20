@@ -15,4 +15,4 @@ jobs:
       with:
         username: 'gaycookie'
         reponame: 'pogo-qr-gen'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN }}
