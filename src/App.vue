@@ -6,20 +6,20 @@
   main
     CanvasContainer
     FormContainer
-
-  footer.pt-3.mt-4.text-muted.border-top
-    | &copy; #[span.year] by #[a.text-reset.text-decoration-none(href="https://www.github.com/gaycookie" target="_blank") GayCookie] with lots of ❤ and ☕.
-    p.text-muted.mb-0 Not affiliated with Niantic Inc., The Pokemon Company, or Nintendo
+  FooterContainer
 </template>
 
 <script>
 import CanvasContainer from './components/CanvasContainer.vue'
 import FormContainer from './components/FormContainer.vue'
+import FooterContainer from './components/FooterContainer.vue'
 
 export default {
   name: 'App',
   components: {
-    CanvasContainer, FormContainer
+    CanvasContainer,
+    FormContainer,
+    FooterContainer
   }
 }
 </script>
