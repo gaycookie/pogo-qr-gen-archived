@@ -26,18 +26,22 @@ export default {
       teams: {
         none: {
           logo: "",
+          frame: "empty.png",
           color: "#000000"
         },
         instinct: {
           logo: "instinct.png",
+          frame: "zapdos.png",
           color: "#FFDE00"
         },
         mystic: {
           logo: "mystic.png",
+          frame: "articuno.png",
           color: "#3B4CCA"
         },
         valor: {
           logo: "valor.png",
+          frame: "moltres.png",
           color: "#CC0000"
         }
       }
@@ -79,44 +83,36 @@ export default {
       const [width, height] = [this.$refs.qrCanvas.width, this.$refs.qrCanvas.height];
       if (!ctx) return;
 
-      ctx.globalAlpha = 1;
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, width, height);
 
-      if (options.show_logo && options.team != 'none') {
-        const logoImage = new Image();
-        logoImage.src = require('@/assets/images/' + this.teams[options.team].logo);
-        ctx.globalAlpha = 0.3;
-        await this.drawImage(ctx, logoImage, 64, 64, width - 128, height - 128);
+      let color = this.teams['none'].color;
+      if (options.team && options.team != 'none') {
+        color = this.teams[options.team].color;
       }
 
-      ctx.globalAlpha = 1;
       const qrCode = new QRCodeStyling({
         type: 'canvas',
         width: width,
         height: height,
         data: options.code,
-        backgroundOptions: {
-          color: 'transparent'
-        },
-        dotsOptions: {
-          type: options.style,
-          color: "#000000D0"
-        },
-        cornersDotOptions: {
-          color: this.teams[options.team].color + "D0"
-        },
-        qrOptions: { 
-          errorCorrectionLevel: options.level
-        } 
+        cornersSquareOptions: { color: color },
+        cornersDotOptions: { color: '#000000' },
+        qrOptions: { errorCorrectionLevel: options.level },
+        dotsOptions: { type: options.style, color: "#000000" },
       });
 
       const qrImage = await qrCode._getElement('png');
-      ctx.drawImage(qrImage, 16, 16, width - 32, height - 32);
+      ctx.drawImage(qrImage, 64, 64, width - 128, height - 128);
 
-      ctx.strokeStyle = this.teams[options.team].color;
-      ctx.lineWidth = 16;
-      ctx.strokeRect(0, 0, width, height);
+      const frameImage = new Image();
+      if (options.show_logo && options.team != 'none') {
+        frameImage.src = require('@/assets/images/frames/' + this.teams[options.team].frame);
+      } else {
+        frameImage.src = require('@/assets/images/frames/' + this.teams['none'].frame);
+      }
+
+      await this.drawImage(ctx, frameImage, 0, 0, width, height);
     }
   },
   mounted() {
