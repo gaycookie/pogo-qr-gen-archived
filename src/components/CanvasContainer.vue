@@ -24,26 +24,10 @@ export default {
     return {
       size: "small",
       teams: {
-        none: {
-          logo: "",
-          frame: "empty.png",
-          color: "#000000"
-        },
-        instinct: {
-          logo: "instinct.png",
-          frame: "zapdos.png",
-          color: "#FFDE00"
-        },
-        mystic: {
-          logo: "mystic.png",
-          frame: "articuno.png",
-          color: "#3B4CCA"
-        },
-        valor: {
-          logo: "valor.png",
-          frame: "moltres.png",
-          color: "#CC0000"
-        }
+        none: { color: "#000000" },
+        instinct: { color: "#FFDE00" },
+        mystic: { color: "#3B4CCA" },
+        valor: { color: "#CC0000" }
       }
     }
   },
@@ -99,19 +83,18 @@ export default {
         cornersSquareOptions: { color: color },
         cornersDotOptions: { color: '#000000' },
         qrOptions: { errorCorrectionLevel: options.level },
-        dotsOptions: { type: options.style, color: "#000000" },
+        dotsOptions: { type: options.dotStyle, color: "#000000" },
       });
 
       const qrImage = await qrCode._getElement('png');
       ctx.drawImage(qrImage, 64, 64, width - 128, height - 128);
 
       const frameImage = new Image();
-      if (options.show_logo && options.team != 'none') {
-        frameImage.src = require('@/assets/images/frames/' + this.teams[options.team].frame);
-      } else {
-        frameImage.src = require('@/assets/images/frames/' + this.teams['none'].frame);
+      let frameSrc = `@/assets/images/frames/simple.png`;
+      if (options.frameStyle && options.frameStyle != 'simple') {
+        frameSrc = `@/assets/images/frames/${options.frameStyle}.png`;
       }
-
+      frameImage.src = require(frameSrc);
       await this.drawImage(ctx, frameImage, 0, 0, width, height);
     }
   },

@@ -29,8 +29,8 @@ form.row.border-top.g-4.needs-validation(@submit="submit" @reset="reset" novalid
     h3 QR Options
 
     .mb-3
-      label.form-label(for="style-input") Dot Style
-      select#style-input.form-select(aria-label="Show Team Color" ref="styleSelect")
+      label.form-label(for="dot-select") Dot Style
+      select#dot-select.form-select(aria-label="Dot Style" ref="dotSelect")
         option(value="square" selected) Sqaures (default)
         option(value="rounded") Rounded
         option(value="extra-rounded") Extra Rounded
@@ -39,10 +39,13 @@ form.row.border-top.g-4.needs-validation(@submit="submit" @reset="reset" novalid
         option(value="classy-rounded") Classy Rounded
 
     .mb-3
-      label.form-label(for="show-logo-input") Show Team Logo
-      select#show-logo-input.form-select(aria-label="Show Team Logo" ref="showLogoSelect")
-        option(value="true" selected) Yes (default)
-        option(value="false") No
+      label.form-label(for="frame-select") Frame Style
+      select#frame-select.form-select(aria-label="Frame Style" ref="frameSelect")
+        option(value="simple" selected) No Pokemon (default)
+        option(value="articuno") Articuno
+        option(value="moltres") Moltres
+        option(value="zapdos") Zapdos
+        option(value="" disabled) More comming soon
 
     div
       label.form-label(for="correction-input") QR Correction Level 
@@ -116,8 +119,8 @@ export default {
 
       const codeEl = this.$refs.codeInput;
       const teamEl = this.$refs.teamSelect;
-      const styleEl = this.$refs.styleSelect;
-      const showLogoEl = this.$refs.showLogoSelect;
+      const dotStyleEl = this.$refs.dotSelect;
+      const frameStyleEl = this.$refs.frameSelect;
       const correctionEl = this.$refs.correctionSelect;
 
       const code = codeEl.value.replace(/[^0-9]/g, '');
@@ -127,31 +130,31 @@ export default {
       }
 
       const team = teamEl.value;
-      if (!team || team == '' || !this.$store.state.teams.includes(team)) {
+      if (!team || !this.$store.getters.hasTeam(team)) {
         this.hasErrors = true;
         teamEl.classList.add('is-invalid');
       }
 
-      const style = styleEl.value;
-      if (!style || style == '' || !this.$store.state.styles.includes(style)) {
+      const dotStyle = dotStyleEl.value;
+      if (!dotStyle || !this.$store.getters.hasDotStyle(dotStyle)) {
         this.hasErrors = true;
-        styleEl.classList.add('is-invalid');
+        dotStyleEl.classList.add('is-invalid');
       }
 
-      const showLogo = JSON.parse(showLogoEl.value);
-      if (showLogo == undefined) {
+      const frameStyle = frameStyleEl.value;
+      if (!frameStyle || !this.$store.getters.hasFrameStyle(frameStyle)) {
         this.hasErrors = true;
-        showLogoEl.classList.add('is-invalid');
+        frameStyleEl.classList.add('is-invalid');
       }
 
       const correction = correctionEl.value;
-      if (!correction || correction == '' || !this.$store.state.levels.includes(correction)) {
+      if (!correction || !this.$store.getters.hasLevel(correction)) {
         this.hasErrors = true;
         correctionEl.classList.add('is-invalid');
       }
 
       if (this.hasErrors) return;
-      this.$root.$emit('drawCustom', { code, team, style, show_logo: showLogo, level: correction });
+      this.$root.$emit('drawCustom', { code, team, dotStyle, frameStyle, level: correction });
     }
   }
 }
