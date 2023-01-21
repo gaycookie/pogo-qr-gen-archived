@@ -90,12 +90,10 @@ export default {
       ctx.drawImage(qrImage, 64, 64, width - 128, height - 128);
 
       const frameImage = new Image();
-      let frameSrc = `@/assets/images/frames/simple.png`;
-      if (options.frameStyle && options.frameStyle != 'simple') {
-        frameSrc = `@/assets/images/frames/${options.frameStyle}.png`;
+      if (options.frameStyle) {
+        frameImage.src = require(`@/assets/images/frames/${options.frameStyle}.png`);
+        await this.drawImage(ctx, frameImage, 0, 0, width, height);
       }
-      frameImage.src = require(frameSrc);
-      await this.drawImage(ctx, frameImage, 0, 0, width, height);
     }
   },
   mounted() {
